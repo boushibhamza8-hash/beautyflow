@@ -7,11 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-insecure-secret-key-change-me')
 DEBUG = os.getenv('DJANGO_DEBUG', '1') == '1'
 
-_allowed_hosts = [h.strip() for h in os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if h.strip()]
-_render_host = os.getenv('RENDER_EXTERNAL_HOSTNAME')
-if _render_host and _render_host not in _allowed_hosts:
-    _allowed_hosts.append(_render_host)
-ALLOWED_HOSTS = _allowed_hosts
+_allowed_hosts = ALLOWED_HOSTS = ['hamzaboushib.pythonanywhere.com', '127.0.0.1', 'localhost', '*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
