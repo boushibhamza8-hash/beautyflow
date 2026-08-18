@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Services</h1><p class="muted">Catalogue personnalisable du salon</p></div>{% if not request.user.is_employee %}<a class="btn btn-primary" href="{% url 'service_create' %}">Ajouter un service</a>{% endif %}</section>
+<div class="card"><table class="table"><thead><tr><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Durée</th><th>Actif</th><th>Actions</th></tr></thead><tbody>{% for item in services %}<tr><td>{{ item.name }}</td><td>{{ item.category }}</td><td>{{ item.price }} DH</td><td>{{ item.duration_minutes }} min</td><td>{% if item.is_active %}Oui{% else %}Non{% endif %}</td><td>{% if not request.user.is_employee %}<a href="{% url 'service_update' item.pk %}">Modifier</a> · <a href="{% url 'service_delete' item.pk %}">Supprimer</a>{% else %}Lecture{% endif %}</td></tr>{% empty %}<tr><td colspan="6">Aucun service.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

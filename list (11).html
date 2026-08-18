@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Dépenses</h1><p class="muted">Charges opérationnelles du salon</p></div><a class="btn btn-primary" href="{% url 'expense_create' %}">Ajouter une dépense</a></section>
+<div class="card"><table class="table"><thead><tr><th>Date</th><th>Catégorie</th><th>Description</th><th>Montant</th><th>Méthode</th></tr></thead><tbody>{% for item in expenses %}<tr><td>{{ item.date }}</td><td>{{ item.get_category_display }}</td><td>{{ item.description }}</td><td>{{ item.amount }} DH</td><td>{{ item.get_payment_method_display }}</td></tr>{% empty %}<tr><td colspan="5">Aucune dépense.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

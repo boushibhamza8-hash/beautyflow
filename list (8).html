@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Employés</h1><p class="muted">Gestion RH et performance</p></div>{% if request.user.is_salon_admin %}<a class="btn btn-primary" href="{% url 'employee_create' %}">Ajouter un employé</a>{% endif %}</section>
+<div class="card"><table class="table"><thead><tr><th>Nom</th><th>Poste</th><th>Téléphone</th><th>Statut</th><th>Commission</th><th>Actions</th></tr></thead><tbody>{% for employee in employees %}<tr><td>{{ employee.first_name }} {{ employee.last_name }}</td><td>{{ employee.position }}</td><td>{{ employee.phone }}</td><td>{{ employee.employee_profile.get_status_display }}</td><td>{{ employee.employee_profile.commission_percentage }}%</td><td>{% if request.user.is_salon_admin %}<a href="{% url 'employee_update' employee.pk %}">Modifier</a> · <a href="{% url 'employee_delete' employee.pk %}">Supprimer</a>{% else %}Lecture{% endif %}</td></tr>{% empty %}<tr><td colspan="6">Aucun employé.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

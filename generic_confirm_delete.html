@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><h1>Confirmation</h1></section>
+<div class="card form-card">
+  <p>Voulez-vous vraiment supprimer cet élément ?</p>
+  <form method="post">{% csrf_token %}<div class="actions-row"><button class="btn btn-danger" type="submit">Supprimer</button><a class="btn btn-outline" href="javascript:history.back()">Annuler</a></div></form>
+</div>
+{% endblock %}

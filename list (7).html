@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Promotions</h1><p class="muted">Promotions et remises par service</p></div><a class="btn btn-primary" href="{% url 'promotion_create' %}">Ajouter une promotion</a></section>
+<div class="card"><table class="table"><thead><tr><th>Nom</th><th>Remise %</th><th>Remise fixe</th><th>Période</th><th>Actif</th><th>Actions</th></tr></thead><tbody>{% for item in promotions %}<tr><td>{{ item.name }}</td><td>{{ item.discount_percentage|default:'—' }}</td><td>{{ item.fixed_discount|default:'—' }}</td><td>{{ item.start_date }} → {{ item.end_date }}</td><td>{% if item.is_active %}Oui{% else %}Non{% endif %}</td><td><a href="{% url 'promotion_update' item.pk %}">Modifier</a> · <a href="{% url 'promotion_delete' item.pk %}">Supprimer</a></td></tr>{% empty %}<tr><td colspan="6">Aucune promotion.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

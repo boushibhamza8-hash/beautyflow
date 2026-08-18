@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Paiements</h1><p class="muted">Suivi des encaissements par méthode</p></div><a class="btn btn-primary" href="{% url 'payment_create' %}">Encaisser</a></section>
+<div class="card"><table class="table"><thead><tr><th>Date</th><th>Client</th><th>Montant</th><th>Méthode</th><th>Employé</th></tr></thead><tbody>{% for item in payments %}<tr><td>{{ item.date }}</td><td>{{ item.client }}</td><td>{{ item.amount }} DH</td><td>{{ item.get_payment_method_display }}</td><td>{{ item.employee|default:'—' }}</td></tr>{% empty %}<tr><td colspan="5">Aucun paiement.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

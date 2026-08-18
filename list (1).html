@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Notifications</h1><p class="muted">Alertes système et événements salon</p></div></section>
+<div class="card"><table class="table"><thead><tr><th>Type</th><th>Titre</th><th>Message</th><th>Statut</th><th>Date</th><th>Action</th></tr></thead><tbody>{% for item in notifications %}<tr><td>{{ item.get_type_display }}</td><td>{{ item.title }}</td><td>{{ item.message }}</td><td>{% if item.is_read %}Lu{% else %}Non lu{% endif %}</td><td>{{ item.created_at|date:'d/m/Y H:i' }}</td><td>{% if not item.is_read %}<a href="{% url 'notification_read' item.pk %}">Marquer comme lu</a>{% else %}—{% endif %}</td></tr>{% empty %}<tr><td colspan="6">Aucune notification.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

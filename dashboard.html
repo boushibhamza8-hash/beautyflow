@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><div class="eyebrow">Vue d’ensemble</div><h1>Tableau de bord</h1></div><div class="actions-row"><a class="btn btn-primary" href="{% url 'appointment_create' %}">Nouveau rendez-vous</a><a class="btn btn-outline" href="{% url 'client_create' %}">Ajouter un client</a><a class="btn btn-outline" href="{% url 'payment_create' %}">Encaisser un paiement</a></div></section>
+<div class="stats-grid">
+  <div class="stat-card"><span>Chiffre d'affaires aujourd'hui</span><strong>{{ today_revenue }} DH</strong></div>
+  <div class="stat-card"><span>Chiffre d'affaires du mois</span><strong>{{ month_revenue }} DH</strong></div>
+  <div class="stat-card"><span>Rendez-vous aujourd'hui</span><strong>{{ today_appointments_count }}</strong></div>
+  <div class="stat-card"><span>Nouveaux clients ce mois</span><strong>{{ new_clients_month }}</strong></div>
+  <div class="stat-card"><span>Total clients</span><strong>{{ total_clients }}</strong></div>
+  <div class="stat-card"><span>Panier moyen</span><strong>{{ avg_order|floatformat:2 }} DH</strong></div>
+  <div class="stat-card"><span>Rendez-vous terminés</span><strong>{{ completed_appointments }}</strong></div>
+  <div class="stat-card"><span>Clients fidèles</span><strong>{{ returning_clients }}</strong></div>
+</div>
+<div class="grid-2">
+  <div class="card"><div class="card-header"><h2>Rendez-vous du jour</h2><a href="{% url 'appointments' %}">Voir tout</a></div>{% if today_appointments %}<table class="table"><thead><tr><th>Heure</th><th>Client</th><th>Service</th><th>Employé</th><th>Statut</th></tr></thead><tbody>{% for item in today_appointments %}<tr><td>{{ item.start_time|time:'H:i' }}</td><td>{{ item.client }}</td><td>{{ item.service.name }}</td><td>{{ item.employee.first_name }}</td><td><span class="pill">{{ item.get_status_display }}</span></td></tr>{% endfor %}</tbody></table>{% else %}<div class="empty-state">Aucun rendez-vous aujourd'hui<br><a class="btn btn-primary" href="{% url 'appointment_create' %}">+ Nouveau rendez-vous</a></div>{% endif %}</div>
+  <div class="card"><div class="card-header"><h2>Alertes</h2><a href="{% url 'notifications' %}">Tout voir</a></div>{% if notifications %}<ul class="list-unstyled">{% for item in notifications %}<li class="list-item"><strong>{{ item.title }}</strong><span>{{ item.message }}</span></li>{% endfor %}</ul>{% else %}<div class="empty-state">Aucune alerte</div>{% endif %}</div>
+</div>
+<div class="grid-2">
+  <div class="card"><div class="card-header"><h2>Clients fidèles</h2><a href="{% url 'clients' %}?filter=loyal">Filtrer</a></div><table class="table"><thead><tr><th>Client</th><th>Total dépensé</th><th>Visites</th><th>Dernière visite</th></tr></thead><tbody>{% for client in loyal_clients %}<tr><td><a href="{% url 'client_detail' client.pk %}">{{ client }}</a></td><td>{{ client.spending|default:0 }} DH</td><td>{{ client.visits|default:0 }}</td><td>{{ client.last_visit|default:'—' }}</td></tr>{% empty %}<tr><td colspan="4">Aucune donnée</td></tr>{% endfor %}</tbody></table></div>
+  <div class="card"><div class="card-header"><h2>Top employés du mois</h2><a href="{% url 'employees' %}">Voir les employés</a></div><table class="table"><thead><tr><th>Employé</th><th>CA</th><th>RDV</th><th>Clients</th></tr></thead><tbody>{% for employee in top_employees %}<tr><td>{{ employee.first_name }} {{ employee.last_name }}</td><td>{{ employee.revenue|default:0 }} DH</td><td>{{ employee.appointment_total }}</td><td>{{ employee.client_total }}</td></tr>{% empty %}<tr><td colspan="4">Aucune donnée</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

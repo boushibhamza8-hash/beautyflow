@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="eyebrow">BEAUTYFLOW</div>
+    <h1>Connexion</h1>
+    <p class="muted">Plateforme SaaS pour salons de beauté premium</p>
+    <form method="post" class="form-grid">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">Se connecter</button>
+    </form>
+    <a class="muted link" href="{% url 'password_reset' %}">Mot de passe oublié</a>
+  </div>
+</div>
+{% endblock %}

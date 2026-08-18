@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Rapports</h1><p class="muted">Analyses financières, clients, services et employés</p></div></section>
+<div class="toolbar"><form method="get" class="toolbar-form"><input type="date" name="start" value="{{ start|date:'Y-m-d' }}"><input type="date" name="end" value="{{ end|date:'Y-m-d' }}"><button class="btn btn-outline" type="submit">Actualiser</button></form></div>
+<div class="stats-grid"><div class="stat-card"><span>Chiffre d’affaires</span><strong>{{ revenue_total }} DH</strong></div><div class="stat-card"><span>Dépenses</span><strong>{{ expense_total }} DH</strong></div><div class="stat-card"><span>Résultat estimé</span><strong>{{ estimated_net }} DH</strong></div><div class="stat-card"><span>Nouveaux clients</span><strong>{{ new_clients }}</strong></div><div class="stat-card"><span>Clients fidèles</span><strong>{{ returning_clients }}</strong></div><div class="stat-card"><span>VIP</span><strong>{{ vip_clients }}</strong></div></div>
+<div class="grid-2"><div class="card"><h2>Répartition des services</h2><canvas id="serviceDistribution"></canvas><table class="table compact"><thead><tr><th>Service</th><th>%</th><th>Réservations</th></tr></thead><tbody>{% for item in distribution %}<tr><td>{{ item.name }}</td><td>{{ item.percentage }}%</td><td>{{ item.count }}</td></tr>{% endfor %}</tbody></table></div><div class="card"><h2>Méthodes de paiement</h2><canvas id="paymentChart"></canvas><table class="table compact"><thead><tr><th>Méthode</th><th>Total</th></tr></thead><tbody>{% for item in payment_stats %}<tr><td>{{ item.payment_method }}</td><td>{{ item.total }} DH</td></tr>{% endfor %}</tbody></table></div></div>
+<div class="card"><h2>Performance employés</h2><canvas id="employeeChart"></canvas><table class="table"><thead><tr><th>Employé</th><th>RDV</th><th>CA</th></tr></thead><tbody>{% for item in employee_stats %}<tr><td>{{ item.employee__first_name }} {{ item.employee__last_name }}</td><td>{{ item.total }}</td><td>{{ item.revenue }} DH</td></tr>{% endfor %}</tbody></table></div>
+<script>
+const dist = {{ distribution_json|safe }};
+const pay = {{ payment_json|safe }};
+const emp = {{ employee_json|safe }};
+new Chart(document.getElementById('serviceDistribution'), {type:'doughnut', data:{labels:dist.map(x=>x.name), datasets:[{data:dist.map(x=>x.percentage), backgroundColor:['#c9a34a','#8d6a25','#f0d48a','#6b5220','#d8be75']}]}});
+new Chart(document.getElementById('paymentChart'), {type:'bar', data:{labels:pay.map(x=>x.payment_method), datasets:[{label:'DH', data:pay.map(x=>x.total), backgroundColor:'#c9a34a'}]}});
+new Chart(document.getElementById('employeeChart'), {type:'bar', data:{labels:emp.map(x=>`${x.employee__first_name} ${x.employee__last_name}`.trim()), datasets:[{label:'DH', data:emp.map(x=>x.revenue), backgroundColor:'#8d6a25'}]}});
+</script>
+{% endblock %}

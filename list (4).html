@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><h1>Produits</h1><p class="muted">Catalogue produits et niveaux de stock</p></div><a class="btn btn-primary" href="{% url 'product_create' %}">Ajouter un produit</a></section>
+<div class="toolbar"><form method="get" class="toolbar-form"><select name="stock_status"><option value="">Tous les niveaux</option><option value="low">Stock faible</option><option value="out">Rupture</option></select><button class="btn btn-outline">Filtrer</button></form></div>
+<div class="card"><table class="table"><thead><tr><th>Produit</th><th>SKU</th><th>Prix vente</th><th>Stock</th><th>Seuil min</th><th>État</th><th>Actions</th></tr></thead><tbody>{% for item in products %}<tr><td>{{ item.name }}</td><td>{{ item.sku }}</td><td>{{ item.selling_price }} DH</td><td>{{ item.current_stock }}</td><td>{{ item.minimum_stock }}</td><td>{% if item.stock_status == 'rupture' %}Produit épuisé{% elif item.stock_status == 'faible' %}Stock faible{% else %}OK{% endif %}</td><td><a href="{% url 'product_update' item.pk %}">Modifier</a> · <a href="{% url 'product_delete' item.pk %}">Supprimer</a></td></tr>{% empty %}<tr><td colspan="7">Aucun produit.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

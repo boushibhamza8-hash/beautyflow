@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-header"><div><div class="eyebrow">Administration plateforme</div><h1>Super Admin</h1></div><a class="btn btn-primary" href="{% url 'salon_create' %}">Créer un salon</a></section>
+<div class="stats-grid">
+  <div class="stat-card"><span>Total salons</span><strong>{{ total_salons }}</strong></div>
+  <div class="stat-card"><span>Salons actifs</span><strong>{{ active_salons }}</strong></div>
+  <div class="stat-card"><span>Salons en essai</span><strong>{{ trial_salons }}</strong></div>
+  <div class="stat-card"><span>Salons suspendus</span><strong>{{ suspended_salons }}</strong></div>
+  <div class="stat-card"><span>MRR</span><strong>{{ mrr }} DH</strong></div>
+  <div class="stat-card"><span>Nouveaux salons</span><strong>{{ new_salons }}</strong></div>
+</div>
+<div class="card"><div class="card-header"><h2>Salons</h2></div><table class="table"><thead><tr><th>Salon</th><th>Propriétaire</th><th>Plan</th><th>Statut</th><th>Création</th><th>Actions</th></tr></thead><tbody>{% for salon in salons %}<tr><td>{{ salon.name }}</td><td>{{ salon.owner_name }}</td><td>{{ salon.get_plan_display }}</td><td>{{ salon.get_subscription_status_display }}</td><td>{{ salon.created_at|date:'d/m/Y' }}</td><td><a href="{% url 'salon_update' salon.pk %}">Modifier</a> · <a href="{% url 'salon_toggle' salon.pk %}">Suspendre / Activer</a></td></tr>{% endfor %}</tbody></table></div>
+<div class="card"><div class="card-header"><h2>Plans</h2></div><table class="table"><thead><tr><th>Code</th><th>Nom</th><th>Prix</th></tr></thead><tbody>{% for plan in plans %}<tr><td>{{ plan.code }}</td><td>{{ plan.name }}</td><td>{{ plan.price }} DH</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

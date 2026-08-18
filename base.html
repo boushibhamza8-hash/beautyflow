@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ APP_NAME }}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  {% if request.user.is_authenticated %}
+  <aside class="sidebar">
+    <div>
+      <div class="brand">{{ APP_NAME }}</div>
+      <div class="salon-meta">{% if CURRENT_SALON %}{{ CURRENT_SALON.name }}{% else %}Administration{% endif %}</div>
+      <nav class="nav-links">
+        {% if request.user.is_platform_admin %}
+          <a href="{% url 'platform_dashboard' %}">🏢 Administration SaaS</a>
+          <a href="{% url 'salon_create' %}">➕ Nouveau salon</a>
+          <a href="{% url 'django-admin:index' %}">⚙️ Django Admin</a>
+        {% else %}
+          <a href="{% url 'dashboard' %}">🏠 Tableau de bord</a>
+          <a href="{% url 'appointments' %}">📅 Rendez-vous</a>
+          <a href="{% url 'clients' %}">👩 Clients</a>
+          <a href="{% url 'services' %}">✂️ Services</a>
+          {% if not request.user.is_employee %}
+          <a href="{% url 'payments' %}">💳 Paiements</a>
+          <a href="{% url 'cash_register' %}">💰 Caisse</a>
+          {% endif %}
+          <a href="{% url 'employees' %}">👩‍💼 Employés</a>
+          {% if not request.user.is_employee %}
+          <a href="{% url 'products' %}">📦 Produits</a>
+          <a href="{% url 'stock' %}">📉 Stock</a>
+          <a href="{% url 'reports' %}">📊 Rapports</a>
+          <a href="{% url 'promotions' %}">🎁 Promotions</a>
+          {% endif %}
+          <a href="{% url 'reviews' %}">⭐ Avis & Feedback</a>
+          <a href="{% url 'notifications' %}">🔔 Notifications {% if UNREAD_NOTIFICATIONS %}<span class="badge">{{ UNREAD_NOTIFICATIONS }}</span>{% endif %}</a>
+          {% if not request.user.is_employee %}<a href="{% url 'settings' %}">⚙️ Paramètres</a>{% endif %}
+        {% endif %}
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <div>{{ request.user.get_full_name|default:request.user.username }}</div>
+      <div class="muted">{{ request.user.get_role_display }}</div>
+      <a class="btn btn-outline btn-full" href="{% url 'logout' %}">Déconnexion</a>
+    </div>
+  </aside>
+  {% endif %}
+  <main class="content">
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="toast">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>
